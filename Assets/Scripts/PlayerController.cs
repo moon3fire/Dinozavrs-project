@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,31 +8,44 @@ public class PlayerController : MonoBehaviour
     private float moveSpeed;
     private float horizontalInput;
     private float verticalInput;
+
+    [SerializeField]
+    private float playerCoordinateBound = 8.0f;
+
+
     void Start()
     {
         moveSpeed = 5.0f;
     }
-    [SerializeField]
-    private float leftBoundX = -8.0f;
-    [SerializeField]
-    private float rightBoundX = 8.0f;
 
-    
     void Update()
     {
-        horizontalInput = Input.GetAxis("Horizontal");
-        verticalInput = Input.GetAxis("Vertical");
+        updatePlayerPosition();
+    }
 
-        transform.Translate(horizontalInput * moveSpeed * Time.deltaTime ,
-        0 , verticalInput * moveSpeed * Time.deltaTime);
+    private void updatePlayerPosition()
+    {
+        float horizontalDirectionChange = Input.GetAxis("Horizontal") * moveSpeed * Time.deltaTime;
+        float verticalDirectionChange = Input.GetAxis("Vertical") * moveSpeed * Time.deltaTime;
 
-        if(transform.position.x < leftBoundX)
+        transform.Translate(horizontalDirectionChange, 0, verticalDirectionChange);
+        boundPlayerCoords();
+    }
+
+    private void boundPlayerCoords()
+    {
+        float coordX = boundValue(transform.position.x, playerCoordinateBound);
+        float coordZ = boundValue(transform.position.z, playerCoordinateBound);
+        transform.position = new Vector3(coordX, 0, coordZ);
+    }
+
+    public float boundValue(float value, float bound)
+    {
+        if (-bound < value && value < bound)
         {
-            transform.position = new Vector3(leftBoundX , transform.position.y , transform.position.z);
+            return value;
         }
-        if(transform.position.x > rightBoundX)
-        {
-            transform.position = new Vector3(rightBoundX , transform.position.y , transform.position.z);
-        }
+
+        return bound * Math.Sign(value);
     }
 }
