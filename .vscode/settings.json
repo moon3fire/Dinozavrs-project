@@ -1,0 +1,7 @@
+{
+    "prettier.tabWidth": 4,
+    "prettier.singleQuote": true,
+    "[csharp]": {
+        "editor.defaultFormatter": "ms-dotnettools.csharp"
+    }
+}
