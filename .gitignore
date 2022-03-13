@@ -26,6 +26,9 @@
 # Visual Studio cache directory
 .vs/
 
+#avoiding code editor formatter change
+.vscode/
+
 # Gradle cache directory
 .gradle/
 
